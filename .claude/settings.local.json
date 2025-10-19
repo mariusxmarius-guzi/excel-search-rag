@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p data/input data/processed embeddings config src outputs logs prompts tests)",
+      "Bash(python create_sample_excel.py)",
+      "Bash(tree -L 3 -I '__pycache__|*.pyc|.git' --dirsfirst)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,54 @@
+# RAG System Requirements - Anthropic Claude Version
+# This is the main requirements file optimized for Anthropic Claude
+
+# Core dependencies
+pandas>=2.0.0,<3.0.0
+openpyxl>=3.1.0
+numpy>=1.24.0,<3.0.0
+
+# Embeddings and Vector Search
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.4
+
+# LLM Integration - Anthropic Claude (Primary)
+anthropic>=0.40.0
+
+# Alternative LLM providers (uncomment if needed)
+# openai>=1.0.0  # For GPT-4
+# langchain>=0.1.0  # For LangChain integration (has complex dependencies)
+
+# Configuration and Environment
+python-dotenv>=1.0.0
+pyyaml>=6.0
+
+# CLI and UI
+click>=8.1.0
+rich>=13.0.0
+
+# Logging
+loguru>=0.7.0
+
+# Data Validation
+pydantic>=2.0.0,<3.0.0
+pydantic-settings>=2.0.0
+
+# Optional dependencies - Install separately as needed
+# Vector database alternative:
+# chromadb>=0.4.0
+
+# Development and visualization:
+# jupyter>=1.0.0
+# matplotlib>=3.7.0
+# seaborn>=0.12.0
+# plotly>=5.14.0
+
+# Web interface (optional):
+# streamlit>=1.28.0
+
+# Testing (for development):
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+
+# Type checking (for development):
+# mypy>=1.5.0
+# types-PyYAML>=6.0.0

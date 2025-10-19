@@ -1,0 +1,15 @@
+{
+  "claudeCode.model": "claude-opus-4-1-20250805",
+  "claudeCode.temperature": 0.25,
+  "claudeCode.contexts": {
+    "production": {
+      "temperature": 0.2
+    },
+    "testing": {
+      "temperature": 0.3
+    },
+    "exploration": {
+      "temperature": 0.5
+    }
+  }
+}
