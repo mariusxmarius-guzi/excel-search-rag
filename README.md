@@ -99,7 +99,7 @@ Sistemul combină **căutarea vectorială** (FAISS/ChromaDB) cu **generarea augm
 
 1. **Clonează sau descarcă proiectul**
 ```bash
-cd excel-search
+cd excel-search-rag
 ```
 
 2. **Creează mediu virtual (recomandat)**
@@ -384,7 +384,7 @@ Clasa principală care orchestrează întregul sistem.
 ## 🗂️ Structura Proiect
 
 ```
-excel-search/
+excel-search-rag/
 ├── data/
 │   ├── input/              # Fișiere Excel de intrare
 │   └── processed/          # Date procesate

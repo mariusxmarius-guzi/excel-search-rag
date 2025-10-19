@@ -52,9 +52,13 @@ class FAISSRetriever:
             else:
                 index = self.faiss.IndexFlatL2(self.dimension)
         elif self.index_type == "IVF":
-            # IVF with 100 clusters
+            # IVF with dynamic cluster count
+            # FAISS requires at least 39*nlist training vectors
+            # For small datasets, we'll use a smaller nlist value
             quantizer = self.faiss.IndexFlatL2(self.dimension)
-            index = self.faiss.IndexIVFFlat(quantizer, self.dimension, 100)
+            # Store nlist as instance variable so it can be adjusted dynamically
+            self.nlist = 100  # Default, will be adjusted in add_embeddings if needed
+            index = self.faiss.IndexIVFFlat(quantizer, self.dimension, self.nlist)
         elif self.index_type == "HNSW":
             index = self.faiss.IndexHNSWFlat(self.dimension, 32)
         else:
@@ -83,7 +87,24 @@ class FAISSRetriever:
 
         # Train index if needed
         if self.index_type == "IVF" and not self.is_trained:
-            logger.info("Training IVF index...")
+            n_samples = len(embeddings)
+
+            # Adjust nlist if dataset is too small
+            # FAISS requires at least 39*nlist training samples (rule of thumb)
+            # For safety, we use n_samples / 10 as max nlist, with minimum of 1
+            if n_samples < 39 * self.nlist:
+                new_nlist = max(1, min(self.nlist, n_samples // 10))
+                if new_nlist != self.nlist:
+                    logger.warning(
+                        f"Dataset too small ({n_samples} samples) for {self.nlist} clusters. "
+                        f"Recreating index with {new_nlist} clusters."
+                    )
+                    # Recreate index with smaller nlist
+                    quantizer = self.faiss.IndexFlatL2(self.dimension)
+                    self.nlist = new_nlist
+                    self.index = self.faiss.IndexIVFFlat(quantizer, self.dimension, self.nlist)
+
+            logger.info(f"Training IVF index with {self.nlist} clusters on {n_samples} samples...")
             self.index.train(embeddings)
             self.is_trained = True
 

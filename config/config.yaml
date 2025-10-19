@@ -8,7 +8,7 @@ embeddings:
   dimension: 768
   batch_size: 32
   storage: "faiss"  # or "chromadb"
-  index_type: "Flat"  # Use "Flat" for small datasets (<1000 docs), "IVF" for >10K docs
+  index_type: "Flat"  # Options: "Flat" (best for <10K docs), "IVF" (for >10K docs), "HNSW" (fast approximate search)
   save_dir: "./embeddings"
 
 prompts:
@@ -18,14 +18,17 @@ prompts:
 
 llm:
   provider: "anthropic"  # Using Claude
-  model: claude-3-opus-20240229 # "claude-3-5-sonnet-20241022"  # or "claude-3-opus-20240229" for most capable
+  model: "claude-opus-4-1"  # Claude Sonnet 4.5 (2025) - Best for coding and agents
+  # Alternative models:
+  # - "claude-haiku-4-5" - Faster and cheaper, good for simple tasks
+  # - "claude-opus-4-1" - Most powerful, best for complex reasoning
   temperature: 0.2
   max_tokens: 2000
   api_key_env: "ANTHROPIC_API_KEY"
 
 retrieval:
   top_k: 5
-  similarity_threshold: 0.7
+  similarity_threshold: 0.0  # Set to 0.0 to return all results. For L2 metric, typical good scores are 0.1-0.3
   rerank: true
   max_context_length: 4000
 

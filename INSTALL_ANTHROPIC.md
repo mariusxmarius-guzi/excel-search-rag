@@ -16,14 +16,14 @@ Step-by-step installation guide for the RAG System configured to use Anthropic C
 
 **Windows:**
 ```bash
-cd excel-search
+cd excel-search-rag
 python -m venv venv
 venv\Scripts\activate
 ```
 
 **Linux/macOS:**
 ```bash
-cd excel-search
+cd excel-search-rag
 python3 -m venv venv
 source venv/bin/activate
 ```

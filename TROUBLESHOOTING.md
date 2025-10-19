@@ -143,6 +143,33 @@ anthropic_api_key=sk-ant-xxx     # ❌ Wrong case
 3. Update `.env` file
 4. Make sure no extra characters or spaces
 
+### ❌ Error: "model: claude-3-5-sonnet-20241022" (404 Not Found)
+
+**Full Error:**
+```
+anthropic.NotFoundError: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-3-5-sonnet-20241022'}}
+```
+
+**Cause:** Model name is outdated or incorrect
+
+**Solution:** Update model name in `config/config.yaml` to use current Claude models (2025):
+
+```yaml
+llm:
+  model: "claude-sonnet-4-5"  # Recommended - Best balance of speed/quality
+
+  # Alternative models:
+  # model: "claude-haiku-4-5"   # Faster and cheaper
+  # model: "claude-opus-4-1"    # Most powerful for complex reasoning
+```
+
+**Current Claude Models (2025):**
+- `claude-sonnet-4-5` - Best for coding and agents (recommended)
+- `claude-haiku-4-5` - Fast and economical ($1/$5 per million tokens)
+- `claude-opus-4-1` - Most powerful for complex tasks
+
+**Note:** Claude 3.x models (like `claude-3-opus-20240229`) were deprecated in mid-2025.
+
 ### ❌ Error: "Could not load config file"
 
 **Solution:**
@@ -218,16 +245,30 @@ excel:
 
 ## Runtime Issues
 
-### ❌ Error: "Rate limit exceeded"
+### ❌ Error: "Rate limit exceeded" or "Error 500 - Overloaded"
 
-**Cause:** Too many API calls to Anthropic
+**Full Error:**
+```
+anthropic.InternalServerError: Error code: 500 - {'type': 'error', 'error': {'type': 'api_error', 'message': 'Overloaded'}, 'request_id': None}
+```
+
+**Cause:** Too many API calls to Anthropic, or Anthropic's servers are overloaded
 
 **Solution:**
 
-1. Wait 60 seconds and retry
-2. Check your usage at: https://console.anthropic.com/
-3. Reduce query frequency
-4. Consider upgrading your API plan
+1. **Wait and retry** - Usually resolves in 30-60 seconds
+2. Check Anthropic service status: https://status.anthropic.com/
+3. Check your usage at: https://console.anthropic.com/
+4. Use `--no-llm` flag to bypass Claude and just see search results:
+   ```bash
+   python -m src.main search --query "your query" --no-llm
+   ```
+5. Switch to a faster/cheaper model in config:
+   ```yaml
+   llm:
+     model: "claude-haiku-4-5"  # Faster, less likely to be overloaded
+   ```
+6. Consider upgrading your API plan for higher rate limits
 
 ### ❌ Error: "Context length exceeded"
 
@@ -272,15 +313,35 @@ embeddings:
    python -m src.main stats  # Check total documents
    ```
 
-2. **Similarity threshold too high**
+2. **Similarity threshold too high** ⚠️ MOST COMMON ISSUE
+
+   The default threshold of 0.7 is too high for L2 distance metric. Typical good scores are 0.1-0.3!
+
+   **Solution:** Edit `config/config.yaml`:
    ```yaml
    retrieval:
-     similarity_threshold: 0.5  # Lower from 0.7
+     similarity_threshold: 0.0  # Set to 0 to return all results
+   ```
+
+   After changing, test again:
+   ```bash
+   python -m src.main search --query "your query" --no-llm
    ```
 
 3. **Wrong language/query**
    - Try simpler queries
    - Use keywords from your data
+
+**Understanding Similarity Scores:**
+
+With L2 distance metric (default), the score formula is: `score = 1.0 / (1.0 + distance)`
+
+This means:
+- Distance 4.0 → Score 0.20 (excellent match)
+- Distance 6.0 → Score 0.14 (good match)
+- Distance 10.0 → Score 0.09 (ok match)
+
+A threshold of 0.7 would require a distance < 0.43, which is unrealistic for semantic search!
 
 ### ❌ Poor quality results
 
@@ -416,16 +477,42 @@ pip install types-PyYAML types-requests
 
 ### Windows
 
+**Issue:** UnicodeEncodeError with Romanian characters (ă, â, î, ș, ț)
+
+**Full Error:**
+```
+UnicodeEncodeError: 'charmap' codec can't encode character '\u0103' in position 12: character maps to <undefined>
+```
+
+**Cause:** Windows console uses CP1252 encoding by default, which doesn't support Romanian diacritics.
+
+**Solution:** Already fixed in the code! The fix is in [src/main.py](src/main.py:9-12):
+```python
+# Fix Windows console encoding for Romanian characters
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+```
+
+If you still see issues, try:
+```bash
+# Set console code page to UTF-8
+chcp 65001
+
+# Then run your command
+python -m src.main search --query "furnizori"
+```
+
 **Issue:** Path errors with backslashes
 
 **Solution:** Use raw strings or forward slashes:
 ```python
 # Good
-path = r"C:\workspace\excel-search"
-path = "C:/workspace/excel-search"
+path = r"C:\workspace\excel-search-rag"
+path = "C:/workspace/excel-search-rag"
 
 # Bad
-path = "C:\workspace\excel-search"
+path = "C:\workspace\excel-search-rag"
 ```
 
 **Issue:** PowerShell execution policy

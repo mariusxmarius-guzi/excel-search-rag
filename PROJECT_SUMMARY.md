@@ -28,7 +28,7 @@ A complete, production-ready RAG (Retrieval-Augmented Generation) system built i
 ### Project Structure
 
 ```
-excel-search/
+excel-search-rag/
 ├── src/                      # Source code (8 Python modules)
 │   ├── __init__.py          # Package initialization
 │   ├── main.py              # CLI application (350+ lines)

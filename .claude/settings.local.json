@@ -1,9 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir -p data/input data/processed embeddings config src outputs logs prompts tests)",
-      "Bash(python create_sample_excel.py)",
-      "Bash(tree -L 3 -I '__pycache__|*.pyc|.git' --dirsfirst)"
+      "Bash(dir embeddings)",
+      "Bash(dir datainput)",
+      "Bash(venv/Scripts/python.exe debug_index.py)",
+      "Bash(venv/Scripts/python.exe test_search.py)",
+      "Bash(venv/Scripts/python.exe test_search2.py)",
+      "Bash(venv/Scripts/python.exe test_retriever_direct.py)"
     ],
     "deny": [],
     "ask": []

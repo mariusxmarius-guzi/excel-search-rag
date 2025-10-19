@@ -4,6 +4,13 @@ Main CLI application for the RAG system.
 import click
 from pathlib import Path
 import sys
+import io
+
+# Fix Windows console encoding for Romanian characters
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
