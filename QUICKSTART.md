@@ -71,11 +71,24 @@ Try queries like:
 
 ## 7. Generate a Report
 
+Reports are automatically saved with timestamps:
+
 ```bash
+# Generate report with automatic timestamp
 python -m src.main generate-report \
   --query "analiza energie regenerabilă" \
   --output ./outputs/raport.md \
   --include-summary
+
+# Creates file: ./outputs/20251019_180530_raport.md
+```
+
+To disable timestamp (use exact filename):
+```bash
+python -m src.main generate-report \
+  --query "analiza energie regenerabilă" \
+  --output ./outputs/raport.md \
+  --no-timestamp
 ```
 
 ## Using the API

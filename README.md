@@ -205,11 +205,24 @@ Pornește o sesiune conversațională unde poți pune întrebări repetate.
 
 #### 4. Generare raport
 
+Rapoartele sunt salvate automat cu timestamp în nume:
+
 ```bash
+# Generează raport cu timestamp automat
 python -m src.main generate-report \
   --query "analiza furnizorilor din Moldova" \
   --output ./outputs/raport.md \
   --include-summary
+
+# Output: ./outputs/20251019_174230_raport.md
+```
+
+Dacă vrei să dezactivezi timestamp-ul:
+```bash
+python -m src.main generate-report \
+  --query "analiza furnizorilor" \
+  --output ./outputs/raport.md \
+  --no-timestamp
 ```
 
 #### 5. Statistici sistem

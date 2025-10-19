@@ -204,18 +204,29 @@ def interactive(ctx, embeddings_dir, prompts_dir, top_k):
 
 @cli.command()
 @click.option('--query', '-q', required=True, help='Search query for report')
-@click.option('--output', '-o', required=True, help='Output file path')
+@click.option('--output', '-o', required=True, help='Output file path (timestamp will be added automatically)')
 @click.option('--embeddings-dir', default='./embeddings', help='Directory with embeddings')
 @click.option('--prompts-dir', default='./prompts', help='Directory with prompts')
 @click.option('--format', type=click.Choice(['markdown', 'md']), default='markdown', help='Output format')
 @click.option('--include-summary', is_flag=True, help='Include LLM-generated summary')
+@click.option('--no-timestamp', is_flag=True, help='Disable automatic timestamp in filename')
 @click.pass_context
-def generate_report(ctx, query, output, embeddings_dir, prompts_dir, format, include_summary):
+def generate_report(ctx, query, output, embeddings_dir, prompts_dir, format, include_summary, no_timestamp):
     """
     Generate a comprehensive report.
 
     Genereaza un raport detaliat pentru o cautare.
     """
+    from datetime import datetime
+
+    # Add timestamp to filename unless disabled
+    if not no_timestamp:
+        output_path = Path(output)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        # Insert timestamp before extension
+        new_name = f"{timestamp}_{output_path.stem}{output_path.suffix}"
+        output = str(output_path.parent / new_name)
+
     console.print(f"\n[bold blue]Generating Report[/bold blue]\n")
     console.print(f"Query: {query}")
     console.print(f"Output: {output}\n")

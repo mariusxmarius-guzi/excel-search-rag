@@ -1,7 +1,45 @@
 # Change Log - Session 2025-10-19
 
 ## Summary
-Fixed critical issues preventing the RAG system from returning search results and updated to latest Claude models.
+Fixed critical issues preventing the RAG system from returning search results, updated to latest Claude models, and added automatic timestamp feature for generated reports.
+
+---
+
+## New Features
+
+### Automatic Timestamp in Report Filenames
+
+**Feature:** Reports are now automatically saved with timestamps in the filename.
+
+**Implementation:** Modified [src/main.py](src/main.py#L220-228):
+- Adds timestamp in format: `YYYYMMDD_HHMMSS_original_name.md`
+- Example: `raport.md` → `20251019_143052_raport.md`
+- New `--no-timestamp` flag to disable if needed
+
+**Benefits:**
+- ✅ Never overwrite existing reports
+- ✅ Natural chronological sorting
+- ✅ Easy to identify when report was generated
+- ✅ Compare different versions side-by-side
+
+**Usage:**
+```bash
+# With timestamp (default)
+python -m src.main generate-report \
+  --query "furnizori energie" \
+  --output ./outputs/raport.md
+
+# Without timestamp
+python -m src.main generate-report \
+  --query "furnizori energie" \
+  --output ./outputs/raport.md \
+  --no-timestamp
+```
+
+**Documentation:**
+- Added examples in [README.md](README.md#L208-226)
+- Updated [QUICKSTART.md](QUICKSTART.md#L72-92)
+- Created comprehensive [EXAMPLES.md](EXAMPLES.md) with practical use cases
 
 ---
 
