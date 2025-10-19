@@ -15,6 +15,7 @@
 - [Utilizare](#utilizare)
 - [Exemple](#exemple)
 - [API Documentation](#api-documentation)
+- [For AI Assistants](#-for-ai-assistants-claude-etc) ⭐ **NEW**
 - [Contribuții](#contribuții)
 
 ## 📖 Descriere
@@ -471,6 +472,20 @@ Asigură-te că fișierele sunt `.xlsx` sau `.xls` și nu sunt corupte.
 
 ### Out of memory
 Reduce `batch_size` în config.yaml sau procesează mai puține fișiere odată.
+
+## 🤖 For AI Assistants (Claude, etc.)
+
+**START HERE** when working on this project: **[CLAUDE.md](CLAUDE.md)**
+
+This file contains:
+- Complete project context and grounding
+- Critical configuration details
+- Common issues and solutions
+- Code patterns and conventions
+- Modification guidelines
+- Testing strategies
+
+Reading CLAUDE.md first will save time and prevent common mistakes!
 
 ## 🤝 Contribuții
 

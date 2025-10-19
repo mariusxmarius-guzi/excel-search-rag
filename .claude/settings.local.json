@@ -1,12 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir embeddings)",
-      "Bash(dir datainput)",
-      "Bash(venv/Scripts/python.exe debug_index.py)",
-      "Bash(venv/Scripts/python.exe test_search.py)",
-      "Bash(venv/Scripts/python.exe test_search2.py)",
-      "Bash(venv/Scripts/python.exe test_retriever_direct.py)"
+      "Bash(venv/Scripts/python.exe check_excel_structure.py)"
     ],
     "deny": [],
     "ask": []

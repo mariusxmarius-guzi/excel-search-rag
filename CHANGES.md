@@ -7,7 +7,42 @@ Fixed critical issues preventing the RAG system from returning search results, u
 
 ## New Features
 
-### Automatic Timestamp in Report Filenames
+### 1. CLAUDE.md - Project Grounding Document
+
+**Feature:** Comprehensive grounding document for future AI assistant sessions.
+
+**Implementation:** Created [CLAUDE.md](CLAUDE.md) with:
+- Complete project overview and architecture
+- Critical configuration reference
+- Common issues and solutions
+- Code patterns and conventions
+- Modification guidelines
+- Testing strategies
+- Quick reference commands
+
+**Purpose:**
+- ✅ Faster onboarding for new sessions
+- ✅ Prevents common configuration mistakes
+- ✅ Documents design decisions and patterns
+- ✅ Serves as single source of truth
+- ✅ Enables consistent code modifications
+
+**Key Sections:**
+1. **Project Overview** - What, why, how
+2. **Critical Configuration** - Threshold, models, encoding
+3. **Common Issues** - Known problems with solutions
+4. **Modification Guidelines** - How to add features safely
+5. **Testing Strategy** - Validation workflows
+6. **Code Patterns** - Logging, errors, types
+7. **Quick Reference** - Most common commands
+
+**Benefits:**
+- Reduces time to understand project from hours to minutes
+- Prevents repeating known issues (threshold, encoding, models)
+- Ensures code consistency across modifications
+- Documents tribal knowledge and design rationale
+
+### 2. Automatic Timestamp in Report Filenames
 
 **Feature:** Reports are now automatically saved with timestamps in the filename.
 
