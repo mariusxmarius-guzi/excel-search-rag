@@ -34,11 +34,18 @@ class ExcelDataLoader:
 
         Args:
             input_dir: Directory containing Excel files
-            column_mappings: Dictionary mapping standard field names to possible column names
+            column_mappings: Dictionary mapping standard field names to possible column names.
+                           If None, operates in UNSTRUCTURED mode (indexes all columns).
         """
         self.input_dir = Path(input_dir)
-        self.column_mappings = column_mappings or self._default_column_mappings()
+        self.column_mappings = column_mappings  # Can be None for unstructured mode
         self.loaded_data: List[Dict[str, Any]] = []
+
+        # Log mode
+        if self.column_mappings is None:
+            logger.info("ExcelDataLoader initialized in UNSTRUCTURED mode (all columns will be indexed)")
+        else:
+            logger.info(f"ExcelDataLoader initialized in STRUCTURED mode with {len(self.column_mappings)} field mappings")
 
     @staticmethod
     def _default_column_mappings() -> Dict[str, List[str]]:
@@ -148,6 +155,8 @@ class ExcelDataLoader:
         """
         Load a single Excel file and extract records.
 
+        UNSTRUCTURED MODE: Indexes ALL data from ALL columns without mapping.
+
         Args:
             file_path: Path to Excel file
 
@@ -170,42 +179,32 @@ class ExcelDataLoader:
                     logger.warning(f"Sheet '{sheet_name}' is empty, skipping")
                     continue
 
-                # Detect columns
-                column_map = {}
-                for field_name in self.column_mappings.keys():
-                    detected_col = self.detect_column(df, field_name)
-                    if detected_col:
-                        column_map[field_name] = detected_col
-
-                if not column_map:
-                    logger.warning(f"No recognizable columns found in sheet '{sheet_name}'")
-                    continue
-
-                # Process each row
+                # UNSTRUCTURED: Process ALL rows with ALL columns
                 for idx, row in df.iterrows():
                     record = {
                         "source_file": file_path.name,
                         "source_sheet": sheet_name,
                         "row_number": idx + 2,  # +2 for Excel row number (1-indexed + header)
+                        "raw_data": {}  # Store all column:value pairs
                     }
 
-                    # Extract mapped fields
-                    for field_name, col_name in column_map.items():
+                    # Extract ALL columns dynamically
+                    has_data = False
+                    for col_name in df.columns:
                         value = row.get(col_name)
 
-                        # Special handling for power values
-                        if field_name == "power_installed":
-                            value = self.normalize_power_value(value)
-                        elif not pd.isna(value):
-                            value = str(value).strip()
-                        else:
-                            value = None
+                        if pd.isna(value):
+                            continue
 
-                        record[field_name] = value
+                        # Convert value to string
+                        value_str = str(value).strip()
 
-                    # Only add records with at least one non-null field
-                    if any(v is not None and v != "" for k, v in record.items()
-                           if k not in ["source_file", "source_sheet", "row_number"]):
+                        if value_str and value_str != "":
+                            record["raw_data"][str(col_name)] = value_str
+                            has_data = True
+
+                    # Only add records that have at least one non-empty value
+                    if has_data:
                         records.append(record)
 
                 logger.info(f"Extracted {len(records)} records from sheet '{sheet_name}'")

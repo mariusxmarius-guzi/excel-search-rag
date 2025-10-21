@@ -41,6 +41,8 @@ class EmbeddingsGenerator:
         """
         Create a rich text representation of a record for embedding.
 
+        UNSTRUCTURED MODE: Creates text from ALL columns in raw_data.
+
         Args:
             record: Dictionary containing record data
 
@@ -49,37 +51,47 @@ class EmbeddingsGenerator:
         """
         parts = []
 
-        # Client/Supplier name
-        if record.get("client_name"):
-            parts.append(f"Companie: {record['client_name']}")
+        # Add source information (always available)
+        parts.append(f"[Sursa: {record.get('source_file', 'Unknown')} - {record.get('source_sheet', 'Unknown')}]")
 
-        # Source type
-        if record.get("source_type"):
-            parts.append(f"Sursa energie: {record['source_type']}")
+        # UNSTRUCTURED: Process all raw_data fields
+        if "raw_data" in record:
+            for col_name, value in record["raw_data"].items():
+                # Format: "Column Name: Value"
+                parts.append(f"{col_name}: {value}")
+        else:
+            # Fallback to old structured format (for backwards compatibility)
+            # Client/Supplier name
+            if record.get("client_name"):
+                parts.append(f"Companie: {record['client_name']}")
 
-        # Power
-        if record.get("power_installed"):
-            parts.append(f"Putere instalata: {record['power_installed']} MW")
+            # Source type
+            if record.get("source_type"):
+                parts.append(f"Sursa energie: {record['source_type']}")
 
-        # Connection point
-        if record.get("connection_point"):
-            parts.append(f"Loc racordare: {record['connection_point']}")
+            # Power
+            if record.get("power_installed"):
+                parts.append(f"Putere instalata: {record['power_installed']} MW")
 
-        # Address
-        if record.get("address"):
-            parts.append(f"Adresa: {record['address']}")
+            # Connection point
+            if record.get("connection_point"):
+                parts.append(f"Loc racordare: {record['connection_point']}")
 
-        # Contact information
-        contacts = []
-        if record.get("contact_person"):
-            contacts.append(f"Contact: {record['contact_person']}")
-        if record.get("contact_phone"):
-            contacts.append(f"Telefon: {record['contact_phone']}")
-        if record.get("contact_email"):
-            contacts.append(f"Email: {record['contact_email']}")
+            # Address
+            if record.get("address"):
+                parts.append(f"Adresa: {record['address']}")
 
-        if contacts:
-            parts.append(", ".join(contacts))
+            # Contact information
+            contacts = []
+            if record.get("contact_person"):
+                contacts.append(f"Contact: {record['contact_person']}")
+            if record.get("contact_phone"):
+                contacts.append(f"Telefon: {record['contact_phone']}")
+            if record.get("contact_email"):
+                contacts.append(f"Email: {record['contact_email']}")
+
+            if contacts:
+                parts.append(", ".join(contacts))
 
         return ". ".join(parts) + "."
 

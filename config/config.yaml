@@ -38,13 +38,17 @@ logging:
   format: "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>"
 
 excel:
-  # Column mappings - adjust based on your Excel structure
-  column_mappings:
-    client_name: ["Denumire", "Client", "Nume", "Company"]
-    source_type: ["Sursa", "Tip Sursa", "Source Type", "Energie"]
-    power_installed: ["Putere", "Capacitate", "Power", "MW", "kW"]
-    connection_point: ["Racordare", "Statie", "Connection Point"]
-    address: ["Adresa", "Locatie", "Address", "Location"]
-    contact_phone: ["Telefon", "Phone", "Contact"]
-    contact_email: ["Email", "E-mail"]
-    contact_person: ["Contact", "Persoana Contact", "Contact Person"]
+  # UNSTRUCTURED MODE: Set to null to index ALL columns automatically (recommended for unstructured data)
+  # STRUCTURED MODE: Define mappings to extract specific fields
+  column_mappings: null
+
+  # Example structured mappings (uncomment to use):
+  # column_mappings:
+  #   client_name: ["Denumire", "Client", "Nume", "Company"]
+  #   source_type: ["Sursa", "Tip Sursa", "Source Type", "Energie"]
+  #   power_installed: ["Putere", "Capacitate", "Power", "MW", "kW"]
+  #   connection_point: ["Racordare", "Statie", "Connection Point"]
+  #   address: ["Adresa", "Locatie", "Address", "Location"]
+  #   contact_phone: ["Telefon", "Phone", "Contact"]
+  #   contact_email: ["Email", "E-mail"]
+  #   contact_person: ["Contact", "Persoana Contact", "Contact Person"]
