@@ -4,7 +4,11 @@
       "Bash(venv/Scripts/python.exe check_excel_structure.py)",
       "Bash(venv/Scripts/python.exe -m src.main index:*)",
       "Bash(timeout /t 30)",
-      "Bash(venv/Scripts/python.exe -m src.main:*)"
+      "Bash(venv/Scripts/python.exe -m src.main:*)",
+      "Bash(dir:*)",
+      "Bash(venv/Scripts/pip install:*)",
+      "Bash(venv/Scripts/pip.exe:*)",
+      "Bash(./venv/Scripts/python.exe -m pip install:*)"
     ],
     "deny": [],
     "ask": []

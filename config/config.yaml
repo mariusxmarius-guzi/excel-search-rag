@@ -18,19 +18,19 @@ prompts:
 
 llm:
   provider: "anthropic"  # Using Claude
-  model: "claude-opus-4-1"  # Claude Sonnet 4.5 (2025) - Best for coding and agents
+  model: "claude-opus-4-1"  # Claude Opus 4.1 - Most powerful, best for accuracy and clarity
   # Alternative models:
-  # - "claude-haiku-4-5" - Faster and cheaper, good for simple tasks
-  # - "claude-opus-4-1" - Most powerful, best for complex reasoning
-  temperature: 0.2
-  max_tokens: 2000
+  # - "claude-sonnet-4-5" - Balanced performance
+  # - "claude-haiku-4-5" - Faster but less accurate
+  temperature: 0.1  # Lower temperature for more accurate, focused answers
+  max_tokens: 4000  # Increased for detailed, comprehensive responses
   api_key_env: "ANTHROPIC_API_KEY"
 
 retrieval:
-  top_k: 5
+  top_k: 10  # Increased from 5 to 10 for better context coverage
   similarity_threshold: 0.0  # Set to 0.0 to return all results. For L2 metric, typical good scores are 0.1-0.3
-  rerank: true
-  max_context_length: 4000
+  rerank: true  # Enable reranking for better relevance
+  max_context_length: 8000  # Increased for more comprehensive context
 
 logging:
   level: "INFO"
